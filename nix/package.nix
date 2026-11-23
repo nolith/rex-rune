@@ -90,6 +90,7 @@ rustPlatform.buildRustPackage {
   cargoTestFlags = [ "--all-features" ];
   nativeCheckInputs = [
     pkgs.clippy
+    pkgs.procps
     pkgs.rustfmt
     pkgs.python3
     pkgs.desktop-file-utils
