@@ -74,6 +74,22 @@ jobs:
       - name: Run as the runner user on loopback
         run: python3 scripts/ssh-install-private.py
 
+  # The flake's package, with the toolchain in flake.lock rather than mise's. Its
+  # checkPhase runs fmt, Clippy with -D warnings and the tests inside the Nix sandbox.
+  nix:
+    name: Nix
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: cachix/install-nix-action@bb0495a1086c46893eee56f32fd192dfe4a15bb9 # v32.0.0
+        with:
+          github_access_token: ${{ github.token }}
+      - name: Build and check the package
+        run: nix build --print-build-logs .#checks.x86_64-linux.rex-rune
+
   macos:
     name: macOS
     runs-on: macos-15
